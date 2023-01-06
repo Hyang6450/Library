@@ -11,6 +11,6 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(CustomValidationException.class)
     public ResponseEntity<?> validationError(CustomValidationException e) {
-        return ResponseEntity.badRequest().body(new CMRespDto<>("Validation Error", e.getMessage()));
+        return ResponseEntity.badRequest().body(new CMRespDto<>("Validation Error", e.getErrorMap()));
     }
 }
