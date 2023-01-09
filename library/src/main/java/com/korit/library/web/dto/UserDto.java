@@ -29,6 +29,7 @@ public class UserDto {
     @Email
     private String email;
 
+    // roledtl과 join
     private List<RoleDtlDto> roleDtlDto;
 
     private LocalDateTime createDate;
