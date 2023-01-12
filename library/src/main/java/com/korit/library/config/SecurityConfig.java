@@ -9,8 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+@EnableWebSecurity
 @Configuration
-@EnableWebSecurity // 기존것을 버리고 만든거 쓴다라는 어노테이션
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -29,14 +29,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.httpBasic().disable();
         http.authorizeRequests()
-                .antMatchers("/mypage/**", "/security/**") //이 요청주소로 들어오면 인증(authenticated())을 거쳐라
+                .antMatchers("/mypage/**", "/security/**") // 이 요청주소로 들어오면 인증(authenticated())을 거쳐라
                 .authenticated()
-                .anyRequest() // 다른 모든 요청주소들은 모든 권한(permitAll())을 줘라
+                .antMatchers("/admin/**")
+                .hasRole("ADMIN")   // ROLE_ADMIN, ROLE_MANAGER
+                .anyRequest() // 다른 모든 요청 주소들은 모든 권한(permitAll())을 줘라
                 .permitAll()
                 .and()
-                .formLogin() // form을 통한 로그인을 하겠다
-                .loginPage("/account/login") // 로그인 페이지 get 요청
+                .formLogin() // form을 통한 로그인을 하겠다.
+                .loginPage("/account/login") // 로그인 페이지 get요청
                 .loginProcessingUrl("/account/login") // 로그인 인증 post 요청
+                .failureForwardUrl("/account/login/error")
                 .defaultSuccessUrl("/index");
     }
 }
