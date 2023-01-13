@@ -87,10 +87,17 @@
         set
             book_name = #{bookName},
             <if test='author != null'>author = if(#{author} = '', null, #{author}),</if>
-            <if test='author != null'>publisher = if(#{publisher} = '', null, #{publisher}),</if>
-            <if test='author != null'>publication_date = if(#{publicationDate} = '', null, #{publicationDate}),</if>
+            <if test='publisher != null'>publisher = if(#{publisher} = '', null, #{publisher}),</if>
+            <if test='publicationDate != null'>publication_date = if(#{publicationDate} = '', null, #{publicationDate}),</if>
             category = #{category}
         where
             book_code = #{bookCode}
     </update>
+
+    <delete id="deleteBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
+        delete from
+            book_mst
+        where
+            book_code = #{bookCode}
+    </delete>
 </mapper>

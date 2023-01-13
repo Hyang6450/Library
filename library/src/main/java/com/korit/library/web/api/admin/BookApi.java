@@ -57,4 +57,24 @@ public class BookApi {
                 .ok()
                 .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
     }
+
+    @ParamsAspect
+    @ValidAspect
+    @PatchMapping ("/book/{bookCode}")
+    public ResponseEntity<CMRespDto<?>> maintainModifyBook(@PathVariable String bookCode, @Valid @RequestBody BookReqDto bookReqDto, BindingResult bindingResult) {
+        bookService.maintainModifyBook(bookReqDto);
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
+    }
+
+    @ParamsAspect
+    @ValidAspect
+    @DeleteMapping ("/book/{bookCode}")
+    public ResponseEntity<CMRespDto<?>> deleteBook(@PathVariable String bookCode, @Valid @RequestBody BookReqDto bookReqDto, BindingResult bindingResult) {
+        bookService.deleteBook(bookReqDto);
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
+    }
 }
