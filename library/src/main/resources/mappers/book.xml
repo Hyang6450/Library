@@ -86,18 +86,27 @@
         update book_mst
         set
             book_name = #{bookName},
-            <if test='author != null'>author = if(#{author} = '', null, #{author}),</if>
-            <if test='publisher != null'>publisher = if(#{publisher} = '', null, #{publisher}),</if>
-            <if test='publicationDate != null'>publication_date = if(#{publicationDate} = '', null, #{publicationDate}),</if>
+            <if test='author != null and author != ""'>author = #{author},</if>
+            <if test='publisher != null and publisher != ""'>publisher = #{publisher},</if>
+            <if test='publicationDate != null'>publication_date = #{publicationDate},</if>
             category = #{category}
         where
             book_code = #{bookCode}
     </update>
 
-    <delete id="deleteBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
-        delete from
+    <delete id="deleteBookByBookCode">
+        delete
+        from
             book_mst
         where
             book_code = #{bookCode}
     </delete>
+
+    <insert id="registerBookImages" parameterType="list">
+        insert into book_image
+        values
+           <foreach collection="list" item="file" separator=",">  <!-- item -> 변수명 separator -> ,찍어주는 것인데 맨 마지막은 빼고 찍어준다. -->
+                (0, #{file.bookCode}, #{file.saveName}, #{file.originName})
+           </foreach>
+    </insert>
 </mapper>

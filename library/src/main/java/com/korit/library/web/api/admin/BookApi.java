@@ -5,11 +5,13 @@ import com.korit.library.aop.annotation.ValidAspect;
 import com.korit.library.service.admin.BookService;
 import com.korit.library.web.dto.*;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -69,10 +71,18 @@ public class BookApi {
     }
 
     @ParamsAspect
-    @ValidAspect
     @DeleteMapping ("/book/{bookCode}")
-    public ResponseEntity<CMRespDto<?>> deleteBook(@PathVariable String bookCode, @Valid @RequestBody BookReqDto bookReqDto, BindingResult bindingResult) {
-        bookService.deleteBook(bookReqDto);
+    public ResponseEntity<CMRespDto<?>> deleteBook(@PathVariable String bookCode) {
+        bookService.deleteBook(bookCode);
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
+    }
+
+    @ParamsAspect
+    @PostMapping("/book/{bookCode}/images")
+    public ResponseEntity<CMRespDto<?>> registerBookImg(@PathVariable String bookCode, @RequestPart List<MultipartFile> files) {
+        bookService.registerBookImages(bookCode, files);
         return ResponseEntity
                 .ok()
                 .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
