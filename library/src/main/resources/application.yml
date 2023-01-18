@@ -10,11 +10,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/library
     username: root
-    password: 1q2w3e4r
+    password: KimJiHyang77#
 
 mybatis:
   mapper-locations:
     - /mappers/*.xml
 
 file:
-  path: C:/junil/web3-202210/library/upload
+  path: C:/hyang/library/upload/

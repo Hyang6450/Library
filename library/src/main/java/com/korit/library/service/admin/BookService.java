@@ -74,11 +74,12 @@ public class BookService {
         files.forEach(file -> {
             String originFileName = file.getOriginalFilename();
             String extension = originFileName.substring(originFileName.lastIndexOf(".")); // 확장자명 가져오기 (ex) .png)
-            String tempFileName = UUID.randomUUID().toString().replaceAll("-", "") + extension;
+            String tempFileName = UUID.randomUUID().toString().replaceAll("-", "") + extension; // UUID로 바꿔주고 -을 공백으로 바꾸는 작업
 
-            Path uploadPath = Paths.get(filePath + "/book/" + tempFileName); // 경로만 지정
+            Path uploadPath = Paths.get(filePath + "book/" + tempFileName); // 경로만 지정
 
-            File f = new File(filePath + "/book/"); // 경로를 객체로 저장
+            // 경로가 없을 때 경로를 만드는 것(이 작업이 없으면 오류~)
+            File f = new File(filePath + "book/"); // 경로를 객체로 저장
             if (!f.exists()) { // !(not)을 붙여 경로가 없으면 True
                 f.mkdirs(); // 모든 경로를 다 생성해라
             }
@@ -98,6 +99,13 @@ public class BookService {
             bookImageDtos.add(bookImageDto);
         });
         bookRepository.registerBookImages(bookImageDtos);
+    }
 
+    public List<BookImageDto> getBooks(String bookCode) {
+        return bookRepository.findBookImageAll(bookCode);
+    }
+
+    public void removeBookImage(int imageId) {
+        bookRepository.deleteBookImage(imageId);
     }
 }

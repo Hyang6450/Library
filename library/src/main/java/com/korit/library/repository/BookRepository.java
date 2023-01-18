@@ -38,4 +38,8 @@ public interface BookRepository {
     public int deleteBookByBookCode(String bookCode);
 
     public int registerBookImages(List<BookImageDto> bookImageDtos);
+
+    public List<BookImageDto> findBookImageAll(String bookCode);
+
+    public int deleteBookImage(int ImageId);
 }
