@@ -15,6 +15,16 @@
         and rd.return_date is null
     </select>
 
+    <select id="loanRental" resultType="integer">
+        select
+            count(*)
+        from
+            rental_dtl
+        where
+            book_id = #{bookId}
+        and return_date is null
+    </select>
+
     <insert id="saveRentalMst"
             parameterType="com.korit.library.entity.RentalMst"
             useGeneratedKeys="true"

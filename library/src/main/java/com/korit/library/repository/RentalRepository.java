@@ -12,5 +12,6 @@ public interface RentalRepository {
     public int rentalAvailability(int userId);
     public int saveRentalMst(RentalMst rentalMst);
     public int saveRentalDtl(List<RentalDtl> rentalDtlList);
+    public int loanRental(int bookId);
 
 }
