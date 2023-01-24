@@ -41,4 +41,13 @@
                 (0, #{rental.rentalId}, #{rental.bookId}, null)
             </foreach>
     </insert>
+
+    <update id="updateReturnDate">
+        update rental_dtl
+        set
+            return_date = now()
+        where
+            book_id = #{bookId}
+        and return_date is null
+    </update>
 </mapper>

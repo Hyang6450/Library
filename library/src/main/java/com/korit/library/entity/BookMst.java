@@ -29,4 +29,6 @@ public class BookMst {
     private LocalDate publicationDate;
     @ApiModelProperty(value = "분야", example = "테스트")
     private String category;
+
+    private BookLike bookLike;
 }
