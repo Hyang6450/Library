@@ -1,11 +1,12 @@
 package com.korit.library.repository;
 
+import com.korit.library.entity.BookImage;
+import com.korit.library.entity.BookMst;
+import com.korit.library.entity.CategoryView;
 import com.korit.library.web.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.awt.print.Book;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface BookRepository {
@@ -25,9 +26,9 @@ public interface BookRepository {
     D:  도서삭제
      */
 
-    public List<BookMstDto> searchBook(SearchReqDto searchReqDto);
-    public BookMstDto findBookByBookCode(String bookCode);
-    public List<CategoryDto> findAllCategory();
+    public List<BookMst> searchBook(SearchReqDto searchReqDto);
+    public BookMst findBookByBookCode(String bookCode);
+    public List<CategoryView> findAllCategory();
 
     public int saveBook(BookReqDto bookReqDto);
 
@@ -37,9 +38,11 @@ public interface BookRepository {
 
     public int deleteBookByBookCode(String bookCode);
 
-    public int registerBookImages(List<BookImageDto> bookImageDtos);
+    public int registerBookImages(List<BookImage> bookImages);
 
-    public List<BookImageDto> findBookImageAll(String bookCode);
+    public List<BookImage> findBookImageAll(String bookCode);
+
+    public BookImage findBookImageByImageId(int imageId);
 
     public int deleteBookImage(int ImageId);
 }

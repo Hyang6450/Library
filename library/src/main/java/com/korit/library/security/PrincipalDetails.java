@@ -1,6 +1,6 @@
 package com.korit.library.security;
 
-import com.korit.library.web.dto.UserDto;
+import com.korit.library.entity.UserMst;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,15 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails {
 
     @Getter
-    private final UserDto user;
+    private final UserMst user;
     private Map<String, Object> response;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-        user.getRoleDtlDto().forEach(dtl -> {
-            authorities.add(() -> dtl.getRoleMstDto().getRoleName());
+        user.getRoleDtl().forEach(dtl -> {
+            authorities.add(() -> dtl.getRoleMst().getRoleName());
         });
 
         return authorities; // authorities 안에 권한들이 다 들어감.
@@ -59,4 +59,5 @@ public class PrincipalDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
