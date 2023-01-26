@@ -27,6 +27,10 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    public int getBookTotalCount(SearchNumberListReqDto searchNumberListReqDto) {
+        return bookRepository.getBookTotalCount(searchNumberListReqDto);
+    }
+
     public List<BookMst> searchBook(SearchReqDto searchReqDto) {
         searchReqDto.setIndex();
         return bookRepository.searchBook(searchReqDto);
