@@ -90,6 +90,15 @@ public class BookApi {
     }
 
     @ParamsAspect
+    @DeleteMapping ("/books")
+    public ResponseEntity<CMRespDto<?>> removeBooks(@RequestBody DeleteBooksReqDto deleteBooksReqDto) {
+        bookService.removeBooks(deleteBooksReqDto);;
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
+    }
+
+    @ParamsAspect
     @PostMapping("/book/{bookCode}/images")
     public ResponseEntity<CMRespDto<?>> registerBookImg(@PathVariable String bookCode, @RequestPart List<MultipartFile> files) {
         bookService.registerBookImages(bookCode, files);

@@ -67,6 +67,10 @@ public class BookService {
         bookRepository.deleteBookByBookCode(bookCode);
     }
 
+    public void removeBooks(DeleteBooksReqDto deleteBooksReqDto) {
+        bookRepository.deleteBooks(deleteBooksReqDto.getUserIds());
+    }
+
     public void registerBookImages(String bookCode, List<MultipartFile> files) {
         if (files.size() < 1) {
             Map<String, String> errorMap = new HashMap<String, String>();
