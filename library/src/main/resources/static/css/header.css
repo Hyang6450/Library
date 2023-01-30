@@ -34,6 +34,10 @@
     text-shadow: 0px 0px 15px #ec2e0d;
 }
 
+.account-container li a:hover {
+    text-shadow: 0px 0px 15px #ec2e0d;
+}
+
 .account-container {
     display: flex;
     justify-content: space-between;
