@@ -9,11 +9,11 @@ import java.time.LocalDate;
 
 @Data
 public class BookReqDto {
-    @ApiModelProperty(value = "도서코드", example = "소록-999", required = true)
+    @ApiModelProperty(value = "도서 코드", example = "소록-999", required = true)
     @NotBlank
     private String bookCode;
 
-    @ApiModelProperty(value = "도서명", example = "테스트 도서명", required = true)
+    @ApiModelProperty(value = "도서 이름", example = "테스트 도서명", required = true)
     @NotBlank
     private String bookName;
 
@@ -30,4 +30,5 @@ public class BookReqDto {
     @ApiModelProperty(value = "카테고리", example = "가정/생활", required = true)
     @NotBlank
     private String category;
+
 }
