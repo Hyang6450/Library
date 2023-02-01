@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/admin/admin_common.css">
     <link rel="stylesheet" href="/static/css/admin/left_aside.css">
-    <link rel="stylesheet" href="/static/css/admin/book_register.css">
+    <link rel="stylesheet" href="/static/css/admin/book_modification.css">
 </head>
 <body>
     <div id="container">
@@ -42,7 +42,7 @@
                     <h2 class="title-text-h2">도서정보관리</h2>
                     <ul class="sub-menu">
                         <a href="/templates/admin/book_search.html"><li>도서정보 조회</li></a>
-                        <a href="/templates/admin/book_register.html"><li>도서정보 등록</li></a>
+                        <a href="/templates/admin/book_modification.html"><li>도서정보 등록</li></a>
                     </ul>
                     <h2 class="title-text-h2">회원정보 관리</h2>
                     <ul class="sub-menu">
@@ -51,42 +51,42 @@
                 </nav>
             </aside>
             <div class="content-container">
-                <h1 class="content-title">도서정보 등록</h1>
+                <h1 class="content-title">도서정보 수정</h1>
                 <div class="content-main">
                     <div class="content-left">
                         <div class="item-group">
-                            <label class="register-label">도서코드</label>
-                            <input type="text" class="register-input">
+                            <label class="modification-label">도서코드</label>
+                            <input type="text" class="modification-input" disabled>
                             <div class="error-message"></div>
                         </div>
                         <div class="item-group">
-                            <label class="register-label">도서명</label>
-                            <input type="text" class="register-input">
+                            <label class="modification-label">도서명</label>
+                            <input type="text" class="modification-input">
                             <div class="error-message"></div>
                         </div>
                         <div class="item-group">
-                            <label class="register-label">저자</label>
-                            <input type="text" class="register-input">
+                            <label class="modification-label">저자</label>
+                            <input type="text" class="modification-input">
                             <div class="error-message"></div>
                         </div>
                         <div class="item-group">
-                            <label class="register-label">출판사</label>
-                            <input type="text" class="register-input">
+                            <label class="modification-label">출판사</label>
+                            <input type="text" class="modification-input">
                             <div class="error-message"></div>
                         </div>
                         <div class="item-group">
-                            <label class="register-label">출판일</label>
-                            <input type="date" class="register-input">
+                            <label class="modification-label">출판일</label>
+                            <input type="date" class="modification-input">
                             <div class="error-message"></div>
                         </div>
                         <div class="item-group">
-                            <label class="register-label">분류</label>
-                            <select class="register-input category-select">
+                            <label class="modification-label">분류</label>
+                            <select class="modification-input category-select">
                                 
                             </select>
                             <div class="error-message"></div>
                         </div>
-                        <button class="register-button">등록하기</button>
+                        <button class="modification-button">수정하기</button>
                     </div>
                     <div class="content-right">
                         <form class="img-form">
@@ -96,7 +96,7 @@
                                 <img src="/static/images/no_img.png" class="book-img">
                             </div>
                             <div class="button-group">
-                                <button type="button" class="img-register-button" disabled>이미지 등록</button>
+                                <button type="button" class="img-modification-button" disabled>이미지 수정</button>
                                 <button type="button" class="img-cancel-button" disabled>취소</button>
                             </div>
                         </form>
@@ -105,6 +105,6 @@
             </div>
         </main>
     </div>
-    <script src="/static/js/admin/book_register.js"></script>
+    <script src="/static/js/admin/book_modification.js"></script>
 </body>
 </html>
