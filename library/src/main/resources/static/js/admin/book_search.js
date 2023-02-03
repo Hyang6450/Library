@@ -86,7 +86,6 @@ class BookSearchApi {
             }
         });
 
-
         return returnData;
     }
 

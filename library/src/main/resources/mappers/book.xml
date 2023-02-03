@@ -6,11 +6,11 @@
 
     <select id="getBookTotalCount" parameterType="com.korit.library.web.dto.SearchNumberListReqDto" resultType="integer">
         select
-        count(*)
+            count(*)
         from
-        book_mst
+            book_mst
         where
-        1 = 1
+            1 = 1
         <if test='searchValue != null and searchValue !=""'>
             and	(
             book_name like CONCAT('%', #{searchValue}, '%')
@@ -25,31 +25,29 @@
 
     <select id="searchBook" parameterType="com.korit.library.web.dto.SearchReqDto" resultType="com.korit.library.entity.BookMst">
         SELECT
-        bm.book_id as bookId,
-        bm.book_code as bookCode,
-        bm.book_name as bookName,
-        bm.author,
-        bm.publisher,
-        bm.publication_date as publicationDate,
-        bm.category,
-        rd.rentalStatus
-        from
-        book_mst bm
-        left outer join (select
-        rd1.book_id,
-        if(rd2.return_date is null, 'Y', 'N') as rentalStatus
-        from
-        (select
-        max(rental_dtl_id) as rental_dtl_id,
-        book_id
-        from
-        rental_dtl
-        group by
-        book_id) rd1
-        left outer join rental_dtl rd2 on(rd2.rental_dtl_id = rd1.rental_dtl_id)) rd
-        on(rd.book_id = bm.book_id)
-        where
-        1 = 1
+            bm.book_id AS bookId,
+            bm.book_code AS bookCode,
+            bm.book_name AS bookName,
+            bm.author,
+            bm.publisher,
+            bm.publication_date AS publicationDate,
+            bm.category,
+            rd.rentalStatus
+        FROM
+            book_mst bm
+                LEFT OUTER JOIN
+            (SELECT
+                rd1.book_id,
+                    IF(rd2.return_date IS NULL, 'Y', 'N') AS rentalStatus
+            FROM
+                (SELECT
+                MAX(rental_dtl_id) AS rental_dtl_id, book_id
+            FROM
+                rental_dtl
+            GROUP BY book_id) rd1
+            LEFT OUTER JOIN rental_dtl rd2 ON (rd2.rental_dtl_id = rd1.rental_dtl_id)) rd ON (rd.book_id = bm.book_id)
+        WHERE
+            1 = 1
         <if test='searchValue != null and searchValue !=""'>
             and	(
             bm.book_name like CONCAT('%', #{searchValue}, '%')
@@ -74,28 +72,65 @@
             limit #{index}, #{count}
         </if>
     </select>
+    <select id="userSearchBook" parameterType="com.korit.library.web.dto.SearchBookReqDto" resultType="com.korit.library.entity.BookMst">
+        select
+            bm.book_id,
+            bm.book_code,
+            bm.book_name,
+            bm.author,
+            bm.publisher,
+            bm.publication_date,
+            bm.category,
+            bi.save_name,
+            rd.rental_dtl_id,
+            rd.return_date,
+            rm.user_id,
+            lc.like_count
+        from
+            book_mst bm
+            left outer join book_image bi on(bi.book_code = bm.book_code)
+            left outer join rental_dtl rd on(rd.book_id = bm.book_id and rd.return_date is null)
+            left outer join rental_mst rm on(rm.rental_id = rd.rental_id and rm.user_id = #{userId})
+            left outer join book_like bl on(bl.book_id = bm.book_id and bl.user_id = '1')
+            left outer join (select
+                                book_id,
+                                count(book_id) as like_count
+                            from
+                                book_like
+                            group by
+                                book_id) lc on(lc.book_id = bm.book_id)
+        where
+            (bm.book_name like concat('%', #{searchValue},'%')
+        or 	bm.author like ('%', #{searchValue},'%')
+        or 	bm.publisher like ('%', #{searchValue},'%'))
+        and bm.category in
+        <foreach collection="categories" item="categoryName" open="(" close=")" separator=",">
+            #{categoryName}
+        </foreach>
+        limit #{index}, #{count};
+    </select>
 
     <select id="findBookByBookCode" resultType="com.korit.library.entity.BookMst">
         SELECT
-        book_id as bookId,
-        book_code as bookCode,
-        book_name as bookName,
-        author,
-        publisher,
-        publication_date as publicationDate,
-        category
+            book_id as bookId,
+            book_code as bookCode,
+            book_name as bookName,
+            author,
+            publisher,
+            publication_date as publicationDate,
+            category
         from
-        book_mst
+            book_mst
         where
-        book_code = #{bookCode};
+            book_code = #{bookCode};
     </select>
 
     <select id="findAllCategory" resultType="com.korit.library.entity.CategoryView">
         select
-        category_id,
-        category
+            category_id,
+            category
         from
-        category_view
+            category_view
     </select>
 
     <insert id="saveBook" parameterType="com.korit.library.web.dto.BookReqDto">
@@ -107,41 +142,41 @@
     <update id="updateBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
         update book_mst
         set
-        book_name = #{bookName},
-        author = if(#{author} = '', null, #{author}),
-        publisher = if(#{publisher} = '', null, #{publisher}),
-        publication_date = if(#{publicationDate} = '', null, #{publicationDate}),
-        category = #{category}
+            book_name = #{bookName},
+            author = if(#{author} = '', null, #{author}),
+            publisher = if(#{publisher} = '', null, #{publisher}),
+            publication_date = if(#{publicationDate} = '', null, #{publicationDate}),
+            category = #{category}
         where
-        book_code = #{bookCode}
+            book_code = #{bookCode}
     </update>
 
     <update id="maintainUpdateBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
         update book_mst
         set
-        book_name = #{bookName},
-        <if test=' author != null and author != ""'>author = #{author},</if>
-        <if test=' publisher != null and publisher != ""'>publisher =#{publisher},</if>
-        <if test=' publicationDate != null '>publication_date =#{publicationDate},</if>
-        category = #{category}
+            book_name = #{bookName},
+            <if test=' author != null and author != ""'>author = #{author},</if>
+            <if test=' publisher != null and publisher != ""'>publisher =#{publisher},</if>
+            <if test=' publicationDate != null '>publication_date =#{publicationDate},</if>
+            category = #{category}
         where
-        book_code = #{bookCode}
+            book_code = #{bookCode}
     </update>
 
     <delete id="deleteBookByBookCode">
         delete
         from
-        book_mst
+            book_mst
         where
-        book_code = #{bookCode}
+            book_code = #{bookCode}
     </delete>
 
     <delete id="deleteBooks" parameterType="list">
         delete
         from
-        book_mst
+            book_mst
         where
-        book_id in
+            book_id in
         <foreach collection="list" item="bookId" open="(" close=")" separator=",">
             #{bookId}
         </foreach>
@@ -157,46 +192,46 @@
 
     <select id="findBookImageAll" resultType="com.korit.library.entity.BookImage">
         select
-        image_id as imageId,
-        book_code as bookCode,
-        save_name as saveName,
-        origin_name as originName
+            image_id as imageId,
+            book_code as bookCode,
+            save_name as saveName,
+            origin_name as originName
         from
-        book_image
+            book_image
         where
-        book_code = #{bookCode}
+            book_code = #{bookCode}
     </select>
 
     <select id="findBookImageByImageId" resultType="com.korit.library.entity.BookImage">
         select
-        image_id as imageId,
-        book_code as bookCode,
-        save_name as saveName,
-        origin_name as originName
+            image_id as imageId,
+            book_code as bookCode,
+            save_name as saveName,
+            origin_name as originName
         from
-        book_image
+            book_image
         where
-        image_id = #{imageId}
+            image_id = #{imageId}
     </select>
 
     <select id="findBookImageByBookCode" resultType="com.korit.library.entity.BookImage">
         select
-        image_id as imageId,
-        book_code as bookCode,
-        save_name as saveName,
-        origin_name as originName
+            image_id as imageId,
+            book_code as bookCode,
+            save_name as saveName,
+            origin_name as originName
         from
-        book_image
+            book_image
         where
-        book_code = #{bookCode}
+            book_code = #{bookCode}
     </select>
 
     <delete id="deleteBookImage">
         delete
         from
-        book_image
+            book_image
         where
-        image_id = #{imageId}
+            image_id = #{imageId}
     </delete>
 
 </mapper>
