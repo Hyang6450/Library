@@ -1,10 +1,17 @@
 window.onload = () => {
+    HeaderService.getInstance().loadHeader();
+
     SearchService.getInstance().clearBookList();
     SearchService.getInstance().loadSearchBooks();
     SearchService.getInstance().loadCategories();
+    SearchService.getInstance().setMaxPage();
     
     ComponentEvent.getInstance().addClickEventCategoryCheckboxs();
+    ComponentEvent.getInstance().addScrollEventPaging();
+    ComponentEvent.getInstance().addClickEventSearchButton();
 }
+
+let maxPage = 0;
 
 const searchObj = {
     page: 1,
@@ -87,6 +94,11 @@ class SearchService {
         return this.#instance;
     }
 
+    setMaxPage() {
+        const totalCount = SearchApi.getInstance().getTotalCount();
+        maxPage = totalCount % 10 == 0 ? totalCount / 10 : Math.floor(totalCount / 10) + 1;
+    }
+
     loadCategories() {
         const categoryList = document.querySelector(".category-list");
         categoryList.innerHTML = ``;
@@ -161,8 +173,42 @@ class ComponentEvent {
                     // splice => splice(0, 1)이면 0번 인덱스부터 1개를 빼라. 
                     // (배열에서 해당요소를 빼서 다른 곳으로 옮길 때 주로 사용)
                 }
-
+                document.querySelector(".search-button").click();
             }
         }); 
+    }
+
+    addScrollEventPaging() {
+        const html = document.querySelector("html");
+        const body = document.querySelector("body");
+
+        body.onscroll = () => {
+           const scrollPosition = body.offsetHeight - html.clientHeight - html.scrollTop;
+
+           if(scrollPosition < 250 && searchObj.page < maxPage) {
+                searchObj.page++;
+                SearchService.getInstance().loadSearchBooks();
+           }
+        }
+    }
+
+    addClickEventSearchButton() {
+        const searchButton = document.querySelector(".search-button");
+        const searchInput = document.querySelector(".search-input");
+        
+        searchButton.onclick = () => {    
+            searchObj.searchValue = searchInput.value;
+            searchObj.page = 1;
+            window.scrollTo(0, 0);
+            SearchService.getInstance().clearBookList();
+            SearchService.getInstance().setMaxPage();
+            SearchService.getInstance().loadSearchBooks();
+        }
+
+        searchInput.onkeyup = () => {
+            if(window.event.keyCode == 13) {
+                searchButton.click();
+            }
+        }
     }
 }
