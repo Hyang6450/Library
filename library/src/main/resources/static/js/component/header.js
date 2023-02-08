@@ -1,5 +1,3 @@
-
-
 class HeaderService {
     static #instance = null;
     static getInstance() {
