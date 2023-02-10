@@ -1,5 +1,7 @@
 package com.korit.library.config;
 
+import com.korit.library.security.PrincipleOAuth2DetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipleOAuth2DetailsService principleOAuth2DetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -40,6 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/account/login") // 로그인 페이지 get요청
                 .loginProcessingUrl("/account/login") // 로그인 인증 post 요청
                 .failureForwardUrl("/account/login/error")
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(principleOAuth2DetailsService) //PrinsipleOAuth2DetailsService
+                .and()
                 .defaultSuccessUrl("/index");
     }
 }
